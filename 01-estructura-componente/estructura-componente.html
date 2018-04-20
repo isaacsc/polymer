@@ -1,0 +1,24 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+
+<dom-module id="estructura-componente">
+
+  <template>
+    <style>
+      h2 {
+        background-color: orange;
+        color: white;
+      }
+    </style>
+    <h2>Esto es el HTML del component</h2>
+  </template>
+
+  <script>
+
+    class EstructuraComponente extends Polymer.Element {
+      static get is() { return 'estructura-componente';}
+    }
+
+    customElements.define(EstructuraComponente.is, EstructuraComponente);
+  </script>
+
+</dom-module>

@@ -1,0 +1,44 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+
+<dom-module id="object-binding">
+<template>
+  <style>
+    :host {
+      display: block;
+    }
+    
+  </style>
+  [[fullName]]
+  <paper-input label="Nombre" value="{{first}}"></paper-input>
+  <paper-input label="Apellido" value="{{last}}"></paper-input>
+</template>
+
+  <script>
+    class ObjectBinding extends Polymer.Element {
+      static get is() { return 'object-binding'; }
+      static get properties() {
+        return {
+          first: {
+            type: String,
+            value: 'asdf'
+          },
+          last: {
+            type: String,
+            value: '5567'
+          },
+          fullName: {
+            type: String,
+            computed: 'userChanged(first, last)'
+          }
+        };
+      }
+      userChanged(name, surname) {
+        console.log(name, surname);
+        return `${this.first} ${this.last}`
+      }
+    }
+
+    window.customElements.define(ObjectBinding.is, ObjectBinding);
+  </script>
+</dom-module>

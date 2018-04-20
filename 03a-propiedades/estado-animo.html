@@ -1,0 +1,37 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+
+<dom-module id="estado-animo">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      span {
+        text-transform: uppercase;
+      }
+    </style>
+    <div>
+      Hoy me encuentro <span inner-H-T-M-L="[[animo]]"></span>
+    </div>
+  </template>
+
+  <script>
+  class EstadoAnimo extends Polymer.Element {
+    static get is() {
+      return 'estado-animo';
+    }
+    static get properties() {
+      return {
+        animo: {
+          type: String,
+          value: 'feliz',
+          notify: true
+        }
+      }
+    }
+  }
+  customElements.define(EstadoAnimo.is, EstadoAnimo);
+  </script>
+</dom-module>
+
+

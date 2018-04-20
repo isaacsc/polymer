@@ -1,0 +1,71 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-repeat.html"
+>
+<dom-module id="deserializacion-tipos">
+  <template>
+    <style>
+      :host {
+        display: block
+      }
+    </style>
+
+    <div on-click="mostrarTipoMiString">[[miString]]</div>
+    <div on-click="mostrarTipoMiNumero">[[miNumero]]</div>
+    <div hidden$="[[miBoleano]]" on-click="mostrarTipoMiBoleano">miBoleano es false</div>
+    <div hidden$="[[!miBoleano]]" on-click="mostrarTipoMiBoleano">miBoleano es true</div>
+    
+    <template is="dom-repeat" items="[[miArray]]">
+      [[item]]
+    </template>
+    
+    <div>
+      Datos del objeto propiedad1: [[miObjeto.prop1]], propiedad2: [[miObjeto.prop2]], propiedad3: [[miObjeto.prop3]] 
+    </div>
+    
+    <div on-click="mostrarTipoMiFecha">Fecha: [[miFecha]]</div>
+
+  </template>
+  <script>
+    class DeserializacionTipos extends Polymer.Element {
+      
+      static get is() {
+        return 'deserializacion-tipos';
+      }
+
+      static get properties() {
+        return {
+          miString: {
+            type: String,
+            value: 'Esto es una cadena'
+          },
+          miNumero: {
+            type: Number
+          },
+          miBoleano: Boolean,
+          miArray: Array,
+          miObjeto: Object,
+          miFecha: Date
+        };
+      }
+
+      constructor() {
+        super();
+      }
+
+      mostrarTipoMiNumero() {
+        console.log('Tipo es: ', typeof(this.miNumero));
+      }
+      mostrarTipoMiBoleano() {
+        console.log('Tipo es: ', typeof(this.miBoleano));
+      }
+      mostrarTipoMiString() {
+        console.log('Tipo es: ', typeof(this.miString)); 
+      }
+      mostrarTipoMiFecha() {
+        console.log('Tipo es: ', typeof(this.miFecha), ' y valor: ', this.miFecha); 
+      }
+    }
+
+    window.customElements.define(DeserializacionTipos.is, DeserializacionTipos);
+  </script>
+</dom-module>

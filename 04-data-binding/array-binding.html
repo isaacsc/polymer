@@ -1,0 +1,48 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+
+<dom-module id="array-binding">
+<template>
+  <style>
+    :host {
+      display: block;
+    }
+    
+  </style>  
+  <dom-repeat items="[[users]]">
+    <template>
+      [[item]]
+    </template>
+  </dom-repeat>
+
+  <paper-input label="Selecciona un Usuario" value="{{currentUser}}"></paper-input>
+  <button on-click="addUser">Añadir usuario</button>
+  <button on-click="removeUser">Eliminar usuario</button>
+</template>
+
+  <script>
+    class ArrayBinding extends Polymer.Element {
+      static get is() { return 'array-binding'; }
+      static get properties() {
+        return {
+          users: {
+            type: Array,
+            value: function() {
+              return ['Pablo', 'Ivan', 'Olga', 'Carlos', 'Carlos', 'Jose Luis', 'Raul']
+            }
+          }
+        }
+      }
+
+      addUser() {
+        this.push('users', this.currentUser); 
+      }
+
+      removeUser() {
+        var index = this.users.indexOf(this.currentUser);
+        this.splice('users', index, 1);
+      }
+    }
+    window.customElements.define(ArrayBinding.is, ArrayBinding);
+  </script>
+</dom-module>

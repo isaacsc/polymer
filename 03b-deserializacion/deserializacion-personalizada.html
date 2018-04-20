@@ -1,0 +1,54 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+
+<dom-module id="deserializacion-personalizada">
+  <template>
+    <style>
+      :host {
+        display: block
+      }
+    </style>
+
+    <div on-click="mostrarTipoMiFechaEspanola">Fecha Española: [[miFechaEspanola]]</div>
+
+
+  </template>
+
+  <script>
+    
+    class DeserializacionPersonalizada extends Polymer.Element {
+      
+      static get is() {
+        return 'deserializacion-personalizada';
+      }
+
+      static get properties() {
+        return {
+          miFechaEspanola: Date
+        };
+      }
+
+      constructor() {
+        super();
+      }
+
+      _deserializeValue(value, type) {
+        if (type == Date) {
+          return this.fechaEspanolaToDate(value);
+        }
+        return super._deserializeValue(value, type);
+      }
+
+      fechaEspanolaToDate(valor) {
+        console.log('parseando a fecha: ', valor);
+        //realizaría el trabajo de comprobar el formato y parsear...
+        return 'devuelvo el valor que toque';
+      }
+
+      mostrarTipoMiFechaEspanola(){
+        console.log('Tipo es: ', typeof(this.miFechaEspanola), ' y valor: ', this.miFechaEspanola); 
+      }
+    }
+
+    window.customElements.define(DeserializacionPersonalizada.is, DeserializacionPersonalizada);
+  </script>
+</dom-module>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="import" href="ciclo-vida.html">
+  
+  <title>Ciclo de vida de un componente</title>
+  <style>
+    button {
+      border-radius: 10px;
+      cursor: pointer;
+      margin: 24px;
+      outline: none;
+      padding: 16px 24px;
+    }
+  </style>
+</head>
+<body>
+  <h1>
+      Uso del componente ciclo-vida
+  </h1>
+  <p>Se colocan dos elementos en el body y se generan dos elementos en la memoria de Javascript.</p>
+  <p>Pulsa además los botones para poder producir cambios en el estado de un elemento y ver los otros mensajes del ciclo de vida.</p>
+  
+  <ciclo-vida></ciclo-vida>
+
+  <button id="anadirAlDOM">Añadir un elemento al DOM</button>
+  <button id="eliminarDelDOM">Eliminar un elemento del DOM</button>
+  <button id="cambiarAtributo">Cambiar un atributo de elemento</button>
+
+  <script>
+    var el1 = document.createElement('ciclo-vida');
+    el1.setAttribute('id', 'el1');
+    var el2 = new CicloVida();
+
+    document.getElementById('anadirAlDOM').addEventListener('click', function() {
+      document.body.appendChild(el1);
+    });
+
+    document.getElementById('eliminarDelDOM').addEventListener('click', function() {
+      document.body.removeChild(document.getElementById('el1'));
+    });
+
+    document.getElementById('cambiarAtributo').addEventListener('click', function() {
+      el1.setAttribute('test', 'valortest' + Date.now());
+    });
+  </script>
+</body>
+</html>

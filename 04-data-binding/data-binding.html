@@ -1,0 +1,47 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../propiedades/estado-animo.html">
+
+<dom-module id="data-binding">
+<template>
+  <style>
+    :host {
+      display: block;
+    }
+    .rojo {
+      background: red;
+    }
+    .azul {
+      background: blue;
+    }
+    .verde {
+      background: green;
+    }
+  </style>
+  <estado-animo animo="{{estadoAnimo}}" class$="[[color]]"></estado-animo>
+
+  <paper-input label="¿cómo te encuentras?" value="{{estadoAnimo}}"></paper-input>
+
+  <input type="text" value="{{estadoAnimo::input}}">
+  <br>
+
+  Este valor está bindeado: "[[estadoAnimo]]"
+</template>
+
+  <script>
+    class DataBinding extends Polymer.Element {
+      static get is() { return 'data-binding'; }
+      static get properties() {
+        return {
+          estadoAnimo: {
+            type: String,
+            value: 'super bien'
+          },
+          color: String
+        };
+      }
+    }
+
+    window.customElements.define(DataBinding.is, DataBinding);
+  </script>
+</dom-module>

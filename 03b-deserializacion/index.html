@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Deserialización</title>
+
+  <link rel="import" href="deserializacion-tipos.html">
+  <link rel="import" href="deserializacion-personalizada.html">
+</head>
+<body>
+    <deserializacion-tipos 
+      mi-numero="090" 
+      mi-boleano
+      mi-array="[3, 67, 9]"
+      mi-objeto='{"prop1": "valor1", "prop2": "valor2", "prop3": "valor3"}'
+      mi-fecha="1975-02-21"
+    ></deserializacion-tipos>
+
+    <deserializacion-personalizada 
+      mi-fecha-espanola="31/11/2017"
+    ></deserializacion-personalizada>
+</body>
+</html>
