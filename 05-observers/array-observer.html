@@ -1,0 +1,72 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+
+<dom-module id="array-observer">
+  <template>
+    <style>
+      :host {
+        display: block
+      }
+    </style>
+
+    <paper-input value="{{nuevoValor}}" label="Escribe un valor numérico"></paper-input>
+    <paper-button raised on-click="anadirValor">Añadir valor</paper-button>
+    <paper-button raised on-click="anadirTres">Insertar 3 casillas a la vez</paper-button>
+    <br><br><br>
+    [[valores]]
+  </template>
+
+  <script>
+    class ArrayObserver extends Polymer.Element {
+      static get is() {
+        return 'array-observer';
+      }
+
+      static get properties() {
+        return {
+          nuevoValor: String,
+          valores: {
+            type: Array,
+            value: function() { return []; }
+          }
+        };
+      }
+
+      static get observers() {
+        return [
+          'valorInsertadoEliminado(valores.splices)'
+        ]
+      }
+
+      anadirValor() {
+        let valor = parseInt(this.nuevoValor);
+        if(! isNaN(valor)) {
+          console.log('agrego valor', valor)
+          this.push('valores', valor);
+        }
+        this.nuevoValor = null;
+        console.log(this.valores);
+      }
+
+      anadirTres() {
+        this.push('valores', 1, 2, 3);        
+      }
+
+      valorInsertadoEliminado(secciones) {
+        if(secciones && secciones.indexSplices) {
+          let explicaTransformacion = `El empalme comienza en: ${secciones.indexSplices[0].index}`;
+          explicaTransformacion += `\nSe han agregado ${secciones.indexSplices[0].addedCount} casillas`;
+          console.log(explicaTransformacion);
+        }
+      }
+
+      constructor() {
+        super();
+      }
+
+    }
+
+    window.customElements.define(ArrayObserver.is, ArrayObserver);
+  </script>
+</dom-module>

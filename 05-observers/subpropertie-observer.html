@@ -1,0 +1,89 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<dom-module id="subpropertie-observer">
+  <template>
+    <style>
+      :host {
+        display: block;
+        border: 1px solid #ddd;
+        padding: 10px;
+      }
+      div {
+        display: flex;
+        align-items: center;
+      }
+      span {
+        color: red;
+        font-size: 0.9em;
+        margin: 10px 0 0 20px;
+      }
+      paper-input {
+        width: 50%;
+      }
+    </style>
+    <div>
+      <paper-input label="clave" value="{{clave.value}}"></paper-input>
+      <span>[[errorClave]]</span>
+    </div>
+    <div>
+      <paper-input label="Repetir clave" value="{{clave.repeticion}}"></paper-input>
+      <span>[[errorRepeticion]]</span>
+    </div>
+    <button on-click="reset">Resetear</button>
+  </template>
+  <script>
+ 
+    class SubpropertieObserver extends Polymer.Element {
+      static get is() {
+        return 'subpropertie-observer';
+      }
+      static get properties() {
+        return {
+          errorClave: String,
+          errorRepeticion: String,
+          clave: {
+            type: Object,
+            value: function() {
+              return {
+                value: '',
+                repeticion: ''
+              }
+            }
+          }
+        };
+      }
+      
+      static get observers() {
+        return [
+          'comprobarClave(clave.value)',
+          'comprobarIguales(clave.value, clave.repeticion)'
+        ]
+      }
+      constructor() {
+        super();
+      }
+      comprobarClave(cadena) {
+        if(cadena === '') {
+          this.errorClave = '* Campo requerido';
+        } else {
+          this.errorClave = '';
+        }
+      }
+      comprobarIguales(value, repeticion) {
+        console.log('comprobarIguales', value, repeticion);
+        if(value !== repeticion) {
+          this.errorRepeticion = '* Las claves no son iguales';
+        } else {
+          this.errorRepeticion = '';
+        }
+      }
+      reset() {
+        // this.clave.value = '';
+        // this.clave.repeticion = '';
+        this.set('clave.value', '');
+        this.set('clave.repeticion', '');
+      }
+    }
+    window.customElements.define(SubpropertieObserver.is, SubpropertieObserver);
+  </script>
+</dom-module>

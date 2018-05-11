@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../bower_components/polymer/lib/elements/dom-bind.html">
+  <link rel="import" href="../bower_components/polymer/lib/elements/dom-repeat.html">
+
+</head>
+<body>
+  <!-- Wrap elements with auto-binding template to -->
+  <!-- allow use of Polymer bindings in main document -->
+  <dom-bind>
+    <template>
+
+      <!-- Note the data property which gets sets below -->
+      <template is="dom-repeat" items="{{data}}">
+        <div>{{item.name}}: {{item.price}}</div>
+      </template>
+
+    </template>
+  </dom-bind>
+  <script>
+    var autobind = document.querySelector('dom-bind');
+
+    // set data property on dom-bind
+    autobind.data = [
+      { name: 'book', price: '$5.00'},
+      { name: 'pencil', price: '$1.00'},
+      { name: 'flux capacitor', price: '$8,000,000.00'}
+    ];
+  </script>
+</body>
+</html>

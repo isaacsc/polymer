@@ -1,0 +1,69 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<dom-module id="simple-observer">
+  <template>
+    <div class="contador" hidden="{{boom}}">{{cuenta}}</div>
+    <div class="boom" hidden="{{!boom}}">BOOOOOM!!!</div>
+    <p>
+      <paper-button on-tap="disparar" hidden="{{boom}}">Dispara</paper-button>
+    </p>
+  </template>
+  <script>
+  class SimpleObserver extends Polymer.Element {
+    static get is() { return 'simple-observer'; }
+  
+    static get properties() {
+    return {
+      cuenta: {
+        type: Number,
+        value: 10,
+        observer: "vigilarFinCuenta"
+      },
+      task: Number,
+      boom: {
+        type: Boolean,
+        value: false
+      }
+    }
+    }
+
+    static get observers() {
+      return ['cambiaTask(task)', 'cambiaTaskBoom(task, boom)'] 
+    }
+
+    cambiaTask(task) {
+      console.log("cambiaTask", task);
+    }
+
+    cambiaTaskBoom(task, boom) {
+      console.log("cambiaTaskBoom", task, boom);
+    }
+
+    vigilarFinCuenta(valorActual, valorAnterior) {
+      console.log('vigilarFinCuenta',valorActual, valorAnterior, this.cuenta);
+      if(this.cuenta === 0){
+        window.clearTimeout(this.task);
+        this.boom = true;
+        this.dispatchEvent(new CustomEvent('cuenta-atras-agotada'));
+      }
+    }
+
+    decrementar() {
+      this.task = window.setTimeout(this.decrementar.bind(this), 1000);
+      this.cuenta --;
+      console.log('decrementar', this.task ,this.cuenta)
+    }
+    ready() {
+      super.ready();
+      this.task = window.setTimeout(this.decrementar.bind(this), 1000);
+      this.dispatchEvent(new CustomEvent('cuenta-atras-disparada'));
+      console.log('ready', this.task, this.cuenta)
+    }
+    disparar() {
+      this.cuenta = 0;
+    }
+  };
+  window.customElements.define(SimpleObserver.is, SimpleObserver);
+  </script>
+  </script>
+</dom-module>

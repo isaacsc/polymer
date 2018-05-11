@@ -1,0 +1,77 @@
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-repeat.html">
+<dom-module id="dom-repeat-filter">
+      <template>
+        <input value="{{searchString::input}}">
+        <select name="select" value="{{sortList::change}}">
+            <option value="firstname">Nombre</option> 
+            <option value="lastName">Apellido</option>
+          </select>
+    
+        <!-- computeFilter returns a new filter function whenever searchString changes -->
+        <template is="dom-repeat" items="{{employees}}" as="employee"
+            filter="{{computeFilter(searchString)}}" sort="{{computeSort(sortList)}}">
+            <div>{{employee.lastname}}, {{employee.firstname}}</div>
+        </template>
+      </template>
+    
+      <script>
+        class DomRepeatFilter extends Polymer.Element {
+    
+          static get is() { return 'dom-repeat-filter'; }
+    
+          static get properties() {
+            return {
+              employees: {
+                type: Array,
+                value() {
+                  return [
+                    { firstname: "Jack", lastname: "Aubrey" },
+                    { firstname: "Anne", lastname: "Elliot" },
+                    { firstname: "Stephen", lastname: "Maturin" },
+                    { firstname: "Emma", lastname: "Woodhouse" }
+                  ]
+                }
+              }
+            }
+          }
+
+          computeSort(val){
+            switch(val) {
+              case 'firstname':
+                return function(a, b) {
+                  console.log('firstname', a,b)
+                  if (a.firstname === b.firstname) return 0;
+                  return a.firstname < b.firstname ? -1 : 1;
+                };
+              case 'lastName':
+                return function(a, b) {
+                  console.log('lastname', a,b)
+                  if (a.lastName === b.lastName) return 0;
+                  return a.lastName < b.lastName ? -1 : 1;
+                };
+              }
+          }
+    
+          computeFilter(string) {
+            if (!string) {
+              // set filter to null to disable filtering
+              return null;
+            } else {
+              // return a filter function for the current search string
+              string = string.toLowerCase();
+              console.log('employees: ',this.employees);
+              return function(employee) {
+                var first = employee.firstname.toLowerCase();
+                var last = employee.lastname.toLowerCase();
+                return (first.indexOf(string) != -1 ||
+                    last.indexOf(string) != -1);
+              };
+            }
+          }
+        }
+    
+        customElements.define(DomRepeatFilter.is, DomRepeatFilter);
+      </script>
+    </dom-module>

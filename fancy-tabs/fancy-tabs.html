@@ -1,0 +1,121 @@
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<dom-module id="fancy-tabs">
+  <template>
+    <style>
+      :host {
+        display: inline-block;
+        width: 650px;
+        font-family: 'Roboto Slab';
+        contain: content;
+      }
+      :host([background]) {
+        background: var(--background-color, #9E9E9E);
+        border-radius: 10px;
+        padding: 10px;
+      }
+      #panels {
+        box-shadow: 0 2px 2px rgba(0, 0, 0, .3);
+        background: white;
+        border-radius: 3px;
+        padding: 16px;
+        height: 250px;
+        overflow: auto;
+      }
+      #tabs {
+        display: inline-flex;
+        -webkit-user-select: none;
+        user-select: none;
+      }
+      #tabs slot {
+        display: inline-flex; /* Safari bug. Treats <slot> as a parent */
+      }
+      /* Safari does not support #id prefixes on ::slotted
+          See https://bugs.webkit.org/show_bug.cgi?id=160538 */
+      #tabs ::slotted(*) {
+        font: 400 16px/22px 'Roboto';
+        padding: 16px 8px;
+        margin: 0;
+        text-align: center;
+        width: 100px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        cursor: pointer;
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+        background: linear-gradient(#fafafa, #eee);
+        border: none; /* if the user users a <button> */
+      }
+      #tabs ::slotted(:focus) {
+        z-index: 1; /* make sure focus ring doesn't get buried */
+      }
+      #panels ::slotted(*) {
+        display: none;
+      }
+      #panels ::slotted([selected]) {
+        display: block;
+      }
+    </style>
+    <div id="tabs" on-click="_onTabClick">
+      <slot id="tabsSlot" name="tab"></slot>
+    </div>
+    <div id="panels">
+      <slot id="panelsSlot"></slot>
+    </div>
+  </template> 
+  <script>
+    class FancyTabs extends Polymer.Element {
+      static get is() {
+        return 'fancy-tabs';
+      }
+
+      static get properties() {
+        return {
+          selected: {
+            type: "Number",
+            reflectToAttribute: true,
+            observer: 'changeSelected'
+          }
+        }
+      } 
+
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+        this.setAttribute('role', 'tablist');
+        const tabsSlot = this.$.tabsSlot;
+        const panelsSlot = this.$.panelsSlot;
+        this.tabs = tabsSlot.assignedNodes({flatten: true});
+        this.panels = panelsSlot.assignedNodes({flatten: true}).filter(el => {
+          return el.nodeType === Node.ELEMENT_NODE;
+        });
+
+        this.resetSelected();
+      }
+      
+      disconnectedCallback() {
+        super.disconnectedCallback();
+      }
+
+      resetSelected() {
+        this.selected = 0;
+      }
+      
+      _onTabClick(e) { 
+        this.selected = this.tabs.indexOf(e.target);
+      }
+
+      changeSelected(newValue, oldValue = 0) {
+        this.children[oldValue].removeAttribute('selected');
+        this.children[newValue].setAttribute('selected', '');
+        this.panels[oldValue].removeAttribute('selected');
+        this.panels[newValue].setAttribute('selected', '');
+      }
+    }
+    customElements.define(FancyTabs.is, FancyTabs);
+  </script>
+</dom-module>

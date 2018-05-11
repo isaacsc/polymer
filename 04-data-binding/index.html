@@ -6,13 +6,22 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Data Binding</title>
 
+  <link rel="import" href="../bower_components/polymer/lib/elements/dom-bind.html">
+
   <link rel="import" href="data-binding.html">
   <link rel="import" href="object-binding.html">
   <link rel="import" href="array-binding.html">
+  <link rel="import" href="notify-binding.html">
 </head>
 <body>
-  <data-binding></data-binding>
+  <!-- <data-binding></data-binding> -->
   <!-- <object-binding></object-binding> -->
   <!-- <array-binding></array-binding> -->
+  <dom-bind>
+    <template>
+      <notify-binding valoracion="{{valoracion}}"></notify-binding>
+      Tenemos esta valoración: [[valoracion]]
+    </template>
+  </dom-bind>
 </body>
 </html>

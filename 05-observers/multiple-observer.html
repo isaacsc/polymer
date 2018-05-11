@@ -1,0 +1,121 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+
+<dom-module id="multiple-observer">
+  <template>
+    <style>
+      :host {
+        display: block
+      }
+      h1 {
+        margin: 5px 0;
+        font-size: 1.1em;
+      }
+    </style>
+    <h1>Matemáticas</h1>
+    Seleccionar calificación: <select value="{{calificacion.matematicas::change}}">
+      <option value="0">0</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
+    </select>
+    <h1>Lenguaje</h1>
+    Seleccionar calificación: <select value="{{calificacion.lenguaje::change}}">
+      <option value="0">0</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
+    </select>
+    <h1>Ciencias naturales</h1>
+    Seleccionar calificación: <select value="{{calificacion.ciencias::change}}">
+      <option value="0">0</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
+    </select>
+    <h1>MEDIA</h1>
+    Media de las notas: [[media]]
+    <p hidden$="[[!aprobado]]">Curso aprobado</p>
+    <p hidden$="[[aprobado]]">Curso suspendido</p>
+
+  </template>
+
+  <script>
+    class MultipleObserver extends Polymer.Element {
+
+      static get is() {
+        return 'multiple-observer';
+      }
+
+      static get properties() {
+        return {
+          media: Number,
+          aprobado: {
+            type: Boolean,
+            value: true
+          },
+          calificacion: {
+            type: Object,
+            value: function() {
+              return {
+                matematicas: 5,
+                lenguaje: 5,
+                ciencias: 5
+              };
+            }
+          }
+        };
+      }
+
+      static get observers() {
+        return [
+          'cambiosCalificacion(calificacion.*)'
+        ];
+      }
+
+      cambiosCalificacion(changeRecord) {
+        let suma = 0;
+        let materias = 0;
+        let estaAprobado = true;
+        for (let i in this.calificacion) {
+          materias++;
+          let calificacionActual = parseInt(this.calificacion[i]);
+          suma += calificacionActual;
+          if(calificacionActual < 5) {
+            estaAprobado = false;
+          }
+        }
+        this.media = suma / materias;
+        this.media = Math.round(this.media * 10) / 10;
+        this.aprobado = estaAprobado;
+      }
+
+      constructor() {
+        super();
+      }
+
+    }
+
+    window.customElements.define(MultipleObserver.is, MultipleObserver);
+  </script>
+</dom-module>

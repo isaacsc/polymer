@@ -1,0 +1,45 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-repeat.html">
+
+<dom-module id="dom-repeat-events">
+
+  <template>
+    <template is="dom-repeat" id="menu" items="{{menuItems}}">
+        <div>
+          <span>{{item.name}}</span>
+          <span>{{item.ordered}}</span>
+          <button on-click="order">Order</button>
+        </div>
+    </template>
+  </template>
+
+  <script>
+    class DomRepeatEvents extends Polymer.Element {
+
+      static get is() { return 'dom-repeat-events'; }
+
+      static get properties() {
+        return {
+          menuItems: {
+            type: Array,
+            value() {
+              return [
+                {name: 'Pizza', ordered: 0},
+                {name: 'Pasta', ordered: 0},
+                {name: 'Toast', ordered: 0}
+              ];
+            }
+          }
+        }
+      }
+
+      order(e) {
+        console.log(e.model);
+        e.model.set('item.ordered', e.model.item.ordered+1);
+      }
+    }
+
+    customElements.define(DomRepeatEvents.is, DomRepeatEvents);
+  </script>
+
+</dom-module>

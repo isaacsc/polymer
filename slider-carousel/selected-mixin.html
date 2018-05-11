@@ -1,0 +1,24 @@
+<script>
+  const SelectedMixin = superclass => class sliderCarousel extends superclass {
+
+    static get properties() {
+      return {
+        selected: {
+          type: "Number",
+          reflectToAttribute: true,
+          observer: 'changeSelected'
+        }
+      }
+    } 
+
+    changeSelected(newValue, oldValue = 0) {
+      this.children[oldValue].removeAttribute('selected');
+      this.children[newValue].setAttribute('selected', '');
+    }
+
+    resetSelected() {
+      this.selected = 0;
+    }
+
+  }
+</script>

@@ -1,0 +1,40 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/lib/mixins/gesture-event-listeners.html">
+
+<dom-module id="drag-me-declarative">
+  <template>
+    <style>
+      #dragme {
+        width: 500px;
+        height: 500px;
+        background: gray;
+      }
+    </style>
+
+    <div id="dragme" on-track="handleTrack">[[message]]</div>
+  </template>
+
+  <script>
+    class DragMeDeclarative extends Polymer.GestureEventListeners(Polymer.Element) {
+
+      static get is() {return 'drag-me-declarative'}
+
+      handleTrack(e) {
+        switch(e.detail.state) {
+          case 'start':
+            this.message = 'Tracking started!';
+            break;
+          case 'track':
+            this.message = 'Tracking in progress... ' +
+              e.detail.x + ', ' + e.detail.y;
+            break;
+          case 'end':
+            this.message = 'Tracking ended!';
+            break;
+        }
+      }
+
+    }
+    customElements.define(DragMeDeclarative.is, DragMeDeclarative);
+  </script>
+</dom-module>

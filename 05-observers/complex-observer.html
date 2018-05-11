@@ -1,0 +1,78 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="simple-observer.html">
+<dom-module id="complex-observer">
+  <template>
+    <style>
+      article{
+        width: 45%;
+        margin: 1%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        display: block;
+        float: left;
+      }
+      .marcador{
+        margin: 10px;
+        text-align: center;
+        font-family: sans-serif;
+      }
+      span{
+        padding: 10px;
+        background-color: #ddd;
+      }
+    </style>
+    <div class="marcador">
+      <span>Disparadas: {{contadores.disparadas}}</span>
+      <span>Agotadas: {{contadores.agotadas}}</span>
+    </div>
+    <div class="elementos">
+      <template is="dom-repeat" items="{{elementos}}">
+        <article><simple-observer on-cuenta-atras-agotada="agotada" on-cuenta-atras-disparada="disparada" cuenta="{{item}}"></simple-observer></article>
+      </template>
+    </div>
+  </template>
+  <script>
+  class ComplexObserver extends Polymer.Element {
+    static get is(){ return 'complex-observer';}
+    static get properties(){
+      return {
+        elementos: {
+          type: Array,
+          value: function() {
+            return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+          }
+        },
+        contadores: {
+          type: Object,
+          value: function() {
+            return {
+              agotadas: 0,
+              disparadas: 0
+            }
+          }
+        }
+      }
+    }
+    static get observers(){
+      return ['cambioAgotadas(contadores.agotadas)', 'cambioDisparadas(contadores.disparadas)', 'cambioCualquiera(contadores.*)']
+    } 
+    agotada() {
+      //this.contadores.agotadas ++ //eso no notificaría a nadie
+      this.set("contadores.agotadas", this.contadores.agotadas + 1);
+    }
+    disparada() {
+      this.set("contadores.disparadas", this.contadores.disparadas + 1);
+    }
+    cambioAgotadas(valor){
+      console.log("cambio Agotadas, ahora vale: ", valor);
+    }
+    cambioDisparadas(){
+      console.log("cambio Disparadas");
+    }
+    cambioCualquiera(cambios){
+      console.log("En cambio cualquiera", cambios.path, cambios.value);
+    }
+  };
+  window.customElements.define(ComplexObserver.is, ComplexObserver);
+  </script>
+</dom-module>

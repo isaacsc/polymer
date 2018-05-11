@@ -1,0 +1,88 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+
+<dom-module id="notify-binding">
+  <template>
+    <style>
+      :host {
+        display: block
+      }
+      ul {
+        margin: 0;
+        padding: 0;
+      }
+      li {
+        list-style: none;
+        margin-bottom: 5px;
+        cursor: pointer;
+      }
+      .marcado {
+        font-size: 110%;
+        font-weight: bold;
+        color: orange;
+      }
+      .desmarcado {
+        color: #999;
+      }
+    </style>
+
+    <ul>
+      <li on-click="marcarBueno" id="opcionbueno" class$="[[buenoClass]]"> Bueno</li>
+      <li on-click="marcarRegular" id="opcionregular" class$="[[regularClass]]"> Regular</li>
+      <li on-click="marcarMalo" id="opcionmalo" class$="[[maloClass]]"> Malo</li>
+    </ul>
+
+  </template>
+
+  <script>
+    class NotifyBinding extends Polymer.Element {
+      static get is() {
+        return 'notify-binding';
+      }
+
+      static get properties() {
+        return {
+          valoracion: {
+            type: String,
+            notify: true,
+            observer: 'valoracionObserver'
+          },
+          buenoClass: {
+            type: String,
+            value: 'desmarcado'
+          },
+          regularClass: {
+            type: String,
+            value: 'desmarcado'
+          },
+          maloClass: {
+            type: String,
+            value: 'desmarcado'
+          }
+        };
+      }
+
+      constructor() {
+        super();
+      }
+
+      valoracionObserver(valoracion) {
+        console.log('valoracionObserver', valoracion);
+        this.buenoClass = (valoracion == 'bueno')? 'marcado' : 'desmarcado';
+        this.regularClass = (valoracion == 'regular')? 'marcado' : 'desmarcado';
+        this.maloClass = (valoracion == 'malo')? 'marcado' : 'desmarcado';
+      }
+
+      marcarBueno() {
+        this.valoracion = 'bueno';
+      }
+      marcarRegular() {
+        this.valoracion = 'regular';
+      }
+      marcarMalo() {
+        this.valoracion = 'malo';
+      }
+    }
+
+    window.customElements.define(NotifyBinding.is, NotifyBinding);
+  </script>
+</dom-module>

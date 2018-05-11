@@ -1,0 +1,138 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymer/lib/mixins/gesture-event-listeners.html">
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="selected-mixin.html">
+<dom-module id="slider-carousel">
+  <template>
+    <style>
+      :host {
+        display: block;
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        contain: content;
+      }
+
+      :host::after {
+        display: block;
+        content: '';
+        padding-top: 75%; /* 4:3 = height is 75% of width */
+      }
+
+      ::slotted([selected]){
+        width: 100%;
+        height: 100%;
+        position: absolute;
+      }
+
+      ::slotted(:not([selected])) {
+        display: none;
+      }
+
+      button {
+        position: absolute;
+        top: calc(50% - 20px);
+        padding: 0;
+        line-height: 40px;
+        border: none;
+        background: none;
+        color: #DDD;
+        font-size: 40px;
+        font-weight: bold;
+        opacity: 0.7;
+        cursor: pointer;
+      }
+
+      button:hover,
+      button:focus {
+        opacity: 1;
+      }
+
+      #prevBtn {
+        left: 12px;
+      }
+
+      #nextBtn {
+        right: 12px;
+      }
+
+      button[disabled] {
+        opacity: 0.4;
+        cursor: auto;
+        pointer-events: none;
+      }
+    </style> 
+    <slot></slot> 
+    <button id="prevBtn" on-click="prev">&#x276E;</button>
+    <button id="nextBtn" on-click="next">&#x276F;</button>
+  </template> 
+  <script>
+    class sliderCarousel extends SelectedMixin(Polymer.Element) {
+      static get is() {
+        return 'slider-carousel';
+      }
+      
+      constructor(){
+        super();
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+        Polymer.RenderStatus.afterNextRender(this, function() {
+          this.resetSelected();
+          this.images = Array.prototype.slice.call(this.children);
+          Polymer.Gestures.addListener(this, 'track', e => this.handleTrack(e));
+        });
+        
+      }
+
+      disconnectedCallback() {
+        super.disconnectedCallback();
+      }
+
+      changeSelected(newValue, oldValue = 0) {
+        super.changeSelected(newValue, oldValue);
+
+        this.$.nextBtn.disabled = !(this.selected < this.children.length - 1);
+        this.$.prevBtn.disabled = !(this.selected > 0);
+
+        let selected = this.querySelector('[selected]')
+
+        this._loadImage(selected);
+        this._loadImage(selected.previousElementSibling);
+        this._loadImage(selected.nextElementSibling);
+      }
+
+      next() {
+        this.selected++;
+      }
+
+      prev() {
+        this.selected--;
+      }
+
+      show(idx) {
+        if (idx >= 0 && idx < this.children.length){
+          this.selected = idx;
+        }
+      }
+
+      handleTrack(e) {
+        e.preventDefault();
+        switch(e.detail.state) {
+          case 'end':
+            (e.detail.dx > 0) ? this.next() : this.prev(); 
+            break;
+        }
+      }
+
+      _loadImage(img) {
+        if (img && !img.src) {
+          img.src = img.getAttribute('data-src');
+        }
+      }
+
+    }
+    customElements.define(sliderCarousel.is, sliderCarousel);
+  </script>   
+</dom-module> 

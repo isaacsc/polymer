@@ -1,0 +1,59 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+
+<dom-module id="inline-events">
+  <template>
+    <style>
+      :host {
+        display: block;
+        padding: 5px;
+        border: 1px solid orange;
+        margin-bottom: 5px;
+      }
+      p {
+        margin-top: 0;
+        padding: 5px;
+        background-color: darkorange;
+        color: white;
+      }
+    </style>
+
+    <p>
+      Llevas [[contador]] clics
+    </p>
+    <button on-click="incrementaClic">Clic para contar</button>
+    <button on-click="resetear">Resetear la cuenta</button>
+  </template>
+
+  <script>
+    class inlineEvents extends Polymer.Element {
+      static get is() {
+        return 'inline-events';
+      }
+
+      static get properties() {
+        return {
+          contador: {
+            type: Number,
+            value: 0
+          }
+        }
+      }
+
+      constructor() {
+        super();
+      }
+
+      incrementaClic(e) {
+        this.contador++;
+        console.log('Objeto evento', e)
+      }
+
+      resetear() {
+        this.contador = 0;
+      }
+
+    }
+
+    window.customElements.define(inlineEvents.is, inlineEvents);
+  </script>
+</dom-module>
